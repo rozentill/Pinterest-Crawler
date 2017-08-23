@@ -27,6 +27,8 @@ class Crawler(object):
         url = ""
         if len(self.keywords) == 1:
             url = self.link_prefix+self.keywords[0]
+
+        url = "https://www.pinterest.jp/cdwildcat/funny-faces/"
         response = os.popen("phantomjs.exe pinterest.js " + url).read()
 
         tree = html.fromstring(response)
@@ -42,7 +44,8 @@ class Crawler(object):
             img_url = total_img[i]
             img_ori_url = re.sub(r'236x', 'originals', img_url)
             img = s.get(img_ori_url)
-            file_img = self.output_dir + str(self.id) + '.jpg'
+            file_name = img_ori_url.split('/')[-1]
+            file_img = self.output_dir + file_name
             img_write = open(file_img, 'wb')
             img_write.write(img.content)
             img_write.close()
@@ -51,9 +54,9 @@ class Crawler(object):
             text = total_pin[i].xpath('.//p/text()')
 
             if len(text)>=1:
-                txt.write(str(self.id)+' '+ text[0].encode('utf-8') + '\n')
+                txt.write(file_name+' '+ text[0].encode('utf-8') + '\n')
             else:
-                txt.write(str(self.id) + ' None\n')
+                txt.write(file_name + ' None\n')
             self.id += 1
 
         txt.close()

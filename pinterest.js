@@ -1,7 +1,7 @@
 var args = require('system').args;
 var page = require('webpage').create();
 var fs = require('fs');
-var number = 100;
+var number = 0;
 // Find the address given as parameter
 var address = '';
 args.forEach(function(arg, i) {
@@ -25,7 +25,8 @@ page.open(address, function (status) {
     if (status === "success") {
         window.setInterval(function() {
 //            console.log("Now items : "+countItens());
-            if (number > countItens()){
+            if (number < countItens()){
+                number = countItens()
                 page.evaluate(function() {
                     window.document.body.scrollTop = document.body.scrollHeight;
                 });
@@ -36,7 +37,7 @@ page.open(address, function (status) {
                 page.render("page200.png");
                 phantom.exit();
             }
-        }, 500);
+        }, 1500);
 
     }
 
